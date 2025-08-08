@@ -1,0 +1,123 @@
+[
+  {
+    "device_desc": "@bth.inf,%bth\\ms_bthbrb.devicedesc%;Microsoft Bluetooth Enumerator",
+    "friendly_name": null,
+    "mfg": "@bth.inf,%microsoft%;Microsoft",
+    "service": "BthEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHBRB\\6&18981e63&21&1",
+    "device_id": "MS_BTHBRB\\6&18981e63&21&1"
+  },
+  {
+    "device_desc": "@bth.inf,%bth\\ms_bthbrb.devicedesc%;Microsoft Bluetooth Enumerator",
+    "friendly_name": null,
+    "mfg": "@bth.inf,%microsoft%;Microsoft",
+    "service": "BthEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHBRB\\7&d1a3110&12&1",
+    "device_id": "MS_BTHBRB\\7&d1a3110&12&1"
+  },
+  {
+    "device_desc": "@bth.inf,%bth\\ms_bthbrb.devicedesc%;Microsoft Bluetooth Enumerator",
+    "friendly_name": null,
+    "mfg": "@bth.inf,%microsoft%;Microsoft",
+    "service": "BthEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHBRB\\7&d1a3110&1d&1",
+    "device_id": "MS_BTHBRB\\7&d1a3110&1d&1"
+  },
+  {
+    "device_desc": "@bthleenum.inf,%bth\\ms_bthle.devicedesc%;Microsoft Bluetooth LE Enumerator",
+    "friendly_name": null,
+    "mfg": "@bthleenum.inf,%microsoft%;Microsoft",
+    "service": "BthLEEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHLE\\6&18981e63&21&3",
+    "device_id": "MS_BTHLE\\6&18981e63&21&3"
+  },
+  {
+    "device_desc": "@bthleenum.inf,%bth\\ms_bthle.devicedesc%;Microsoft Bluetooth LE Enumerator",
+    "friendly_name": null,
+    "mfg": "@bthleenum.inf,%microsoft%;Microsoft",
+    "service": "BthLEEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHLE\\7&d1a3110&12&3",
+    "device_id": "MS_BTHLE\\7&d1a3110&12&3"
+  },
+  {
+    "device_desc": "@bthleenum.inf,%bth\\ms_bthle.devicedesc%;Microsoft Bluetooth LE Enumerator",
+    "friendly_name": null,
+    "mfg": "@bthleenum.inf,%microsoft%;Microsoft",
+    "service": "BthLEEnum",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHLE\\7&d1a3110&1d&3",
+    "device_id": "MS_BTHLE\\7&d1a3110&1d&3"
+  },
+  {
+    "device_desc": "@bthpan.inf,%bthpan.displayname%;Bluetooth Device (Personal Area Network)",
+    "friendly_name": "Bluetooth Device (Personal Area Network) #3",
+    "mfg": "@bthpan.inf,%mfgname%;Microsoft",
+    "service": "BthPan",
+    "class": null,
+    "class_guid": "{4d36e972-e325-11ce-bfc1-08002be10318}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHPAN\\6&18981e63&21&2",
+    "device_id": "MS_BTHPAN\\6&18981e63&21&2"
+  },
+  {
+    "device_desc": "@bthpan.inf,%bthpan.displayname%;Bluetooth Device (Personal Area Network)",
+    "friendly_name": "Bluetooth Device (Personal Area Network)",
+    "mfg": "@bthpan.inf,%mfgname%;Microsoft",
+    "service": "BthPan",
+    "class": null,
+    "class_guid": "{4d36e972-e325-11ce-bfc1-08002be10318}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHPAN\\7&d1a3110&12&2",
+    "device_id": "MS_BTHPAN\\7&d1a3110&12&2"
+  },
+  {
+    "device_desc": "@bthpan.inf,%bthpan.displayname%;Bluetooth Device (Personal Area Network)",
+    "friendly_name": "Bluetooth Device (Personal Area Network) #2",
+    "mfg": "@bthpan.inf,%mfgname%;Microsoft",
+    "service": "BthPan",
+    "class": null,
+    "class_guid": "{4d36e972-e325-11ce-bfc1-08002be10318}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\BTH\\MS_BTHPAN\\7&d1a3110&1d&2",
+    "device_id": "MS_BTHPAN\\7&d1a3110&1d&2"
+  },
+  {
+    "device_desc": "Generic Bluetooth Adapter",
+    "friendly_name": null,
+    "mfg": "GenericAdapter",
+    "service": "BTHUSB",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\USB\\VID_0489&PID_E10D\\5&30741cdd&0&14",
+    "device_id": "VID_0489&PID_E10D\\5&30741cdd&0&14"
+  },
+  {
+    "device_desc": "Generic Bluetooth Radio",
+    "friendly_name": null,
+    "mfg": "Cambridge Silicon Radio Ltd.",
+    "service": "BTHUSB",
+    "class": null,
+    "class_guid": "{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}",
+    "status": "Enabled",
+    "registry_path": "SYSTEM\\\\CurrentControlSet\\\\Enum\\\\USB\\VID_0A12&PID_0001\\6&76f112&0&2",
+    "device_id": "VID_0A12&PID_0001\\6&76f112&0&2"
+  }
+]

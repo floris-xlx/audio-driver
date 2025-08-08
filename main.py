@@ -111,7 +111,13 @@ def get_device_flow(device):
     return "unknown"
 
 
-def list_audio_devices(only_input=False, only_output=False, sort_by_status=False):
+def list_audio_devices(
+    only_input=False,
+    only_output=False,
+    sort_by_status=False,
+    only_bluetooth=False,
+    show_disabled=False,
+):
     """
     List audio devices, optionally filtering by input/output and sorting by status.
     Also prints device info and writes it to audio_devices.json.
@@ -130,6 +136,10 @@ def list_audio_devices(only_input=False, only_output=False, sort_by_status=False
         if only_input and device_flow != "input":
             continue
         if only_output and device_flow != "output":
+            continue
+        if only_bluetooth and device_flow != "bluetooth":
+            continue
+        if show_disabled and state == "Disabled":
             continue
 
         device_info = {
@@ -150,7 +160,7 @@ def list_audio_devices(only_input=False, only_output=False, sort_by_status=False
 
     if sort_by_status:
         # Enabled first, then disabled
-        device_list.sort(key=lambda d: d["state"] != "Enabled")
+        device_list.sort(key=lambda d: d["state"] == "Enabled")
 
     print(Fore.CYAN + "=== Audio Devices ===" + Style.RESET_ALL)
     for device_info in device_list:
@@ -179,6 +189,142 @@ def list_audio_devices(only_input=False, only_output=False, sort_by_status=False
 
     with open("audio_devices.json", "w", encoding="utf-8") as f:
         json.dump(device_list, f, indent=2, ensure_ascii=False)
+
+
+def list_bluetooth_drivers():
+    r"""
+    List Bluetooth drivers as shown in Device Manager (from Enum\Bluetooth and Enum\USB), show if installed or disabled, and save to bluetooth_drivers.json.
+    """
+    import winreg
+
+    bluetooth_drivers = []
+
+    # Device Manager Bluetooth devices are under:
+    # HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\BTH
+    # and sometimes under USB (for Bluetooth dongles)
+    enum_paths = [
+        r"SYSTEM\\CurrentControlSet\\Enum\\BTH",
+        r"SYSTEM\\CurrentControlSet\\Enum\\USB",
+    ]
+
+    def get_device_info(root, subkey_path):
+        try:
+            with winreg.OpenKey(root, subkey_path) as key:
+                info = {}
+                try:
+                    info["device_desc"], _ = winreg.QueryValueEx(key, "DeviceDesc")
+                except Exception:
+                    info["device_desc"] = None
+                try:
+                    info["friendly_name"], _ = winreg.QueryValueEx(key, "FriendlyName")
+                except Exception:
+                    info["friendly_name"] = None
+                try:
+                    info["mfg"], _ = winreg.QueryValueEx(key, "Mfg")
+                except Exception:
+                    info["mfg"] = None
+                try:
+                    info["service"], _ = winreg.QueryValueEx(key, "Service")
+                except Exception:
+                    info["service"] = None
+                try:
+                    info["class"], _ = winreg.QueryValueEx(key, "Class")
+                except Exception:
+                    info["class"] = None
+                try:
+                    info["class_guid"], _ = winreg.QueryValueEx(key, "ClassGUID")
+                except Exception:
+                    info["class_guid"] = None
+                # Check for ConfigFlags to determine if device is disabled
+                try:
+                    config_flags, _ = winreg.QueryValueEx(key, "ConfigFlags")
+                    # 0x1 means disabled, 0x0 means enabled/installed
+                    if isinstance(config_flags, int) and (config_flags & 0x1):
+                        info["status"] = "Disabled"
+                    else:
+                        info["status"] = "Enabled"
+                except Exception:
+                    # If ConfigFlags is missing, assume enabled/installed
+                    info["status"] = "Enabled"
+                # Check for "Device Parameters" subkey for more info (optional)
+                info["registry_path"] = subkey_path
+                return info
+        except Exception:
+            return None
+
+    for enum_path in enum_paths:
+        try:
+            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, enum_path) as root_key:
+                for i in range(winreg.QueryInfoKey(root_key)[0]):
+                    try:
+                        subkey_name = winreg.EnumKey(root_key, i)
+                        with winreg.OpenKey(root_key, subkey_name) as subkey:
+                            for j in range(winreg.QueryInfoKey(subkey)[0]):
+                                try:
+                                    instance_id = winreg.EnumKey(subkey, j)
+                                    full_path = (
+                                        enum_path
+                                        + "\\"
+                                        + subkey_name
+                                        + "\\"
+                                        + instance_id
+                                    )
+                                    info = get_device_info(
+                                        winreg.HKEY_LOCAL_MACHINE, full_path
+                                    )
+                                    if info:
+                                        # Only include Bluetooth class or service
+                                        if (
+                                            info.get("class")
+                                            and info["class"].lower() == "bluetooth"
+                                        ) or (
+                                            info.get("service")
+                                            and "bth" in info["service"].lower()
+                                        ):
+                                            info["device_id"] = (
+                                                subkey_name + "\\" + instance_id
+                                            )
+                                            bluetooth_drivers.append(info)
+                                except Exception:
+                                    continue
+                    except Exception:
+                        continue
+        except Exception:
+            continue
+
+    print(Fore.CYAN + "=== Bluetooth Drivers (Device Manager) ===" + Style.RESET_ALL)
+    if not bluetooth_drivers:
+        print(
+            Fore.YELLOW
+            + "No Bluetooth drivers found in Device Manager or access denied."
+            + Style.RESET_ALL
+        )
+    else:
+        for driver in bluetooth_drivers:
+            display_name = (
+                driver.get("friendly_name")
+                or driver.get("device_desc")
+                or driver.get("device_id")
+            )
+            status = driver.get("status", "Unknown")
+            color = Fore.GREEN if status == "Enabled" else Fore.RED
+            print(color + f"- {display_name} [{status}]" + Style.RESET_ALL)
+            print(f"  Device ID: {driver.get('device_id')}")
+            if driver.get("friendly_name"):
+                print(f"  Friendly Name: {driver['friendly_name']}")
+            if driver.get("device_desc"):
+                print(f"  Device Description: {driver['device_desc']}")
+            if driver.get("mfg"):
+                print(f"  Manufacturer: {driver['mfg']}")
+            if driver.get("service"):
+                print(f"  Service: {driver['service']}")
+            if driver.get("class"):
+                print(f"  Class: {driver['class']}")
+            if driver.get("class_guid"):
+                print(f"  Class GUID: {driver['class_guid']}")
+            print(f"  Registry Path: {driver['registry_path']}")
+    with open("bluetooth_drivers.json", "w", encoding="utf-8") as f:
+        json.dump(bluetooth_drivers, f, indent=2, ensure_ascii=False)
 
 
 def list_bluetooth_devices():
@@ -263,6 +409,23 @@ def parse_args():
         action="store_true",
         help="Show only output (playback) devices",
     )
+    group.add_argument(
+        "--only-bluetooth-devices",
+        action="store_true",
+        help="Show only Bluetooth devices",
+    )
+
+    group.add_argument(
+        "--show-disabled-devices",
+        action="store_true",
+        default=False,
+        help="Show disabled devices",
+    )
+    parser.add_argument(
+        "--list-bluetooth-drivers",
+        action="store_true",
+        help="List Bluetooth drivers",
+    )
     parser.add_argument(
         "--sort-by-status",
         action="store_true",
@@ -277,7 +440,11 @@ def main():
         only_input=args.only_input_devices,
         only_output=args.only_output_devices,
         sort_by_status=args.sort_by_status,
+        only_bluetooth=args.only_bluetooth_devices,
+        show_disabled=args.show_disabled_devices,
     )
+    if args.list_bluetooth_drivers:
+        list_bluetooth_drivers()
     list_bluetooth_devices()
 
 
